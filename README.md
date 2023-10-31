@@ -1,5 +1,10 @@
-# Python Template
-[![CI](https://github.com/revanth7667/python_template/actions/workflows/cicd.yml/badge.svg)](https://github.com/revanth7667/python_template/actions/workflows/cicd.yml)
+# Semantic Vectors
+
+[![CI](https://github.com/revanth7667/NLP_Semantic-Vectors/actions/workflows/cicd.yml/badge.svg)](https://github.com/revanth7667/NLP_Semantic-Vectors/actions/workflows/cicd.yml)
+
+## This Project is currently in progress
+
+
 
 Base Template For Python Projects
 
