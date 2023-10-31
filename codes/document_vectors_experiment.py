@@ -65,15 +65,11 @@ def generate_data_token_counts(
     """Generate training and testing data with raw token counts."""
     X: FloatArray = np.array(
         [
-            sum_token_embeddings(
-                [onehot(vocabulary_map, token) for token in sentence]
-            )
+            sum_token_embeddings([onehot(vocabulary_map, token) for token in sentence])
             for sentence in h0_documents
         ]
         + [
-            sum_token_embeddings(
-                [onehot(vocabulary_map, token) for token in sentence]
-            )
+            sum_token_embeddings([onehot(vocabulary_map, token) for token in sentence])
             for sentence in h1_documents
         ]
     )
@@ -121,33 +117,23 @@ def generate_data_word2vec(
 
 def run_experiment() -> None:
     """Compare performance with different embeddiings."""
-    X_train, y_train, X_test, y_test = generate_data_token_counts(
-        austen, carroll
-    )
-    clf = LogisticRegression(random_state=0, max_iter=1000).fit(
-        X_train, y_train
-    )
+    X_train, y_train, X_test, y_test = generate_data_token_counts(austen, carroll)
+    clf = LogisticRegression(random_state=0, max_iter=1000).fit(X_train, y_train)
     print("raw counts (train):", clf.score(X_train, y_train))
     print("raw_counts (test):", clf.score(X_test, y_test))
 
     X_train, y_train, X_test, y_test = generate_data_tfidf(austen, carroll)
-    clf = LogisticRegression(random_state=0, max_iter=1000).fit(
-        X_train, y_train
-    )
+    clf = LogisticRegression(random_state=0, max_iter=1000).fit(X_train, y_train)
     print("tfidf (train):", clf.score(X_train, y_train))
     print("tfidf (test):", clf.score(X_test, y_test))
 
     X_train, y_train, X_test, y_test = generate_data_lsa(austen, carroll)
-    clf = LogisticRegression(random_state=0, max_iter=1000).fit(
-        X_train, y_train
-    )
+    clf = LogisticRegression(random_state=0, max_iter=1000).fit(X_train, y_train)
     print("lsa (train):", clf.score(X_train, y_train))
     print("lsa (test):", clf.score(X_test, y_test))
 
     X_train, y_train, X_test, y_test = generate_data_word2vec(austen, carroll)
-    clf = LogisticRegression(random_state=0, max_iter=1000).fit(
-        X_train, y_train
-    )
+    clf = LogisticRegression(random_state=0, max_iter=1000).fit(X_train, y_train)
     print("word2vec (train):", clf.score(X_train, y_train))
     print("word2vec (test):", clf.score(X_test, y_test))
 
