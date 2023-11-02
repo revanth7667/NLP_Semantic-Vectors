@@ -13,7 +13,7 @@ from sklearn.linear_model import LogisticRegression
 FloatArray = NDArray[np.float64]
 
 # Un-comment this to fix the random seed
-# random.seed(31)
+random.seed(31)
 
 austen = nltk.corpus.gutenberg.sents("austen-sense.txt")
 carroll = nltk.corpus.gutenberg.sents("carroll-alice.txt")
@@ -102,6 +102,10 @@ def generate_data_lsa(
     #########################################################################
     # DO SOMETHING HERE.                                                    #
     #########################################################################
+    # Applying LSA to the token counts in X_train and X_test
+    lsa = TruncatedSVD(n_components=300)
+    X_train = lsa.fit_transform(X_train)
+    X_test = lsa.transform(X_test)
     return X_train, y_train, X_test, y_test
 
 
@@ -112,7 +116,29 @@ def generate_data_word2vec(
     #########################################################################
     # DO SOMETHING HERE.                                                    #
     #########################################################################
-    return split_train_test(X, y)
+    # Load a pre-trained Word2Vec model
+    from gensim.models import KeyedVectors
+
+    # using the pre-trained GoogleNews model for converting each word to a 300-dimensional vector
+    # model downlaoded from: https://code.google.com/archive/p/word2vec/
+    # Change path to file if required
+
+    model = KeyedVectors.load_word2vec_format(
+        "GoogleNews-vectors-negative300_.bin", binary=True
+    )
+
+    # converting each token in each document into a Word2Vec vector and aggregate these vectors
+    X = []
+    y = []
+    for label, documents in enumerate([h0_documents, h1_documents]):
+        for document in documents:
+            vectors = [model[word] for word in document if word in model]
+            # if there is at least one word in the document that is also in the model
+            if vectors:
+                X.append(np.sum(vectors, axis=0))
+                y.append(label)
+    # print(len(X), len(y))
+    return split_train_test(np.array(X), np.array(y))
 
 
 def run_experiment() -> None:
